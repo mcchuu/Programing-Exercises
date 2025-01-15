@@ -1,0 +1,13 @@
+integer i
+i = RandomNumber(1,100
+)
+ 
+ 
+if i%15 == 0
+   Put "FizzBuzz" to output
+elseif i%3 == 0
+   Put "Fizz" to output
+elseif i%5 == 0
+   Put "Buzz" to output
+else
+   Put "Hello World" to output
