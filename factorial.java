@@ -25,8 +25,8 @@ public class factorial {
     
         }
         
-        int i;  // initalize a counter
-        int fact = 1;  // initalize factorial variable
+        double i;  // initalize a counter
+        double fact = 1;  // initalize factorial variable
 
         // reassign the product of counter and factorial and increment counter until counter is one more than number
         for(i = 1; i < num + 1; i++){
