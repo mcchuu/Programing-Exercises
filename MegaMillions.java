@@ -19,7 +19,7 @@ public class MegaMillions {
     // Initialize the game (set balance, print welcome message)
     public static void initializeGame() {
         balance = 50.0;
-        System.out.println("\n       WELCOME TO MEGA MILLIONS!\n =====================================\nYou start with $50.00.");
+        System.out.println("\n       WELCOME TO MEGA MILLIONS!\n =====================================\nYou start with $50.00.\n");
     }
 
     // Run the game loop (handle multiple rounds of play)
@@ -27,7 +27,8 @@ public class MegaMillions {
         while (balance >= 2) {
             playRound();
             
-            if (balance < 2) { 
+            if (balance < 2) {
+                System.out.print("\nYou do not have enough money to continue playing. :(");
                 break;
             }
             System.out.print("\nDo you want to play again? (yes/no): ");
@@ -54,7 +55,7 @@ public class MegaMillions {
         boolean megaplierFlag = false;
         int megaplier = 1;
         int[] winningNumbers = generateNumbers();
-        int winningMegaBall = winningNumbers[5];
+        int winningMegaBall = random.nextInt(25) + 1;
 
         while (true) {
             choice = scanner.nextLine();
@@ -71,7 +72,7 @@ public class MegaMillions {
                     int count = 0;
                     while (count < 5) {
                         int num = getValidNumber(scanner); // pass user input to getValidNumber to validate numbers
-                        if (!contains(numbers, num, count)) {
+                        if (!contains(numbers, num)) {
                             numbers[count] = num;
                             count++;
                         } else {
@@ -103,9 +104,15 @@ public class MegaMillions {
             while (true) {
                 choice = scanner.nextLine();
                 if (choice.equalsIgnoreCase("yes")) {
-                    totalSpent += 3;
-                    megaplierFlag = true;
-                    break;
+                    if (balance <= 2) {
+                        System.out.print("You do not have enough money to add Megaplier.\n");
+                        break;
+                    }
+                    else {
+                        totalSpent += 3;
+                        megaplierFlag = true;
+                        break;
+                    }
                 } else if (choice.equalsIgnoreCase("no")) {
                     totalSpent += 2;
                     break;
@@ -122,13 +129,14 @@ public class MegaMillions {
             int matchCount = countMatches(numbers, winningNumbers);
             boolean megaBallMatch = (megaBall == winningMegaBall);
             int prize = getPrize(matchCount, megaBallMatch);
-            
+        
             if (megaplierFlag) { 
                 megaplier = getRandomMegaplier();
+                System.out.println("Megaplier  Drawn: x" + megaplier);
+
             }
-            
-            System.out.println("Megaplier  Drawn: x" + megaplier + "\n====================================\n");
-            
+            System.out.println("====================================\n");
+                        
             if (prize > 0 && prize != 100000000) {
                 prize *= megaplier;
             }
@@ -155,17 +163,16 @@ public class MegaMillions {
 
     // Generate an array of 5 unique random numbers (1-70)
     public static int[] generateNumbers() { 
-        int[] numbers = new int[6];
-                
+        int[] numbers = new int[5]; 
         int count = 0;
+
         while (count < 5){
             int num = random.nextInt(70) + 1;
-            if (!contains(numbers, num, count)){
+            if (!contains(Arrays.copyOfRange(numbers, 0, count), num)){
                 numbers[count] = num;
                 count++;
             }
         }
-        numbers[5] = random.nextInt(25) + 1;
         return numbers;
     }
 
@@ -186,26 +193,20 @@ public class MegaMillions {
     }
 
     // Check if an array contains a specific number
-    public static boolean contains(int[] numbers, int num, int count) { 
-        boolean unique = false;
-        for (int i = 0; i < count; i++) {
-            if (numbers[i] == num) {
-                unique = true;
-            }
+    public static boolean contains(int[] numbers, int number) {
+        for (int num: numbers) {
+                if (num == number) {
+                    return true;
+                }
         }
-        return unique;
+        return false;
     }
 
     // Count matching numbers between user and winning numbers
     public static int countMatches(int[] numbers, int[] winningNumbers) {
         int count = 0;
-        for (int i = 0; i < numbers.length; i++) {
-            for (int x = 0; x < winningNumbers.length; x++) {
-                if (numbers[i] == winningNumbers[x]) {
-                    count++;
-                    break;
-                }
-            }
+        for (int num : numbers) {
+            if (contains(winningNumbers, num)) count++;
         }
         return count;
     }
