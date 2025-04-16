@@ -160,3 +160,5 @@ public class SuperStoreTest {
 // 2. Make a class Coupon with a final discountRate and apply it to a Product
 // 3. Add a method to Electronics called warrantyInfo() and mark it final
 // 4. Use access modifiers appropriately and explain your choices in comments
+// I used these access modifiers to properly encapsulate private fields like productId and protected ones like name and price. I also used them for public static nextId, subclasses, and consistent final methods like warrantyInfo.
+
